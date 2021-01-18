@@ -49,10 +49,18 @@ def human_readable_size_as_string(size_in_bytes, ndigits=3):
 
 def make_table_list(item_list, path=None, size_list=None):
     table = []
+    size_special = {
+        -1: 'symlink',
+        -2: 'error_in_dict'
+    }
     if size_list is not None and len(item_list) == len(size_list):
         table = ["Name", "Total Size"]
         for folder, size in zip(item_list, size_list):
-            table.extend([folder, human_readable_size_as_string(size)])
+            if size < 0:
+                size_str = size_special[size]
+            else:
+                size_str = human_readable_size_as_string(size)
+            table.extend([folder, size_str])
     elif path is not None:
         table = ["Name", "Size", "Last modified"]
         for file in item_list:
@@ -73,7 +81,13 @@ def make_table_list(item_list, path=None, size_list=None):
 def get_sizes(folder_list, path, input_dict):
     sizes = []
     for folder in folder_list:
-        sizes.append(input_dict[os.path.join(path, folder)]["Size"])
+        fp = os.path.join(path, folder)
+        if os.path.islink(fp):
+            sizes.append(-1)
+        elif fp in input_dict:
+            sizes.append(input_dict[os.path.join(path, folder)]["Size"])
+        else:
+            sizes.append(-2)
     return sizes
 
 
