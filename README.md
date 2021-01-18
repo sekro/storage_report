@@ -1,6 +1,8 @@
 # storage_report
 Simple storage/folder content report tool
 
+Walks through given folder and generates a report (markdown) in output_folder giving an overview over files & folders 
+
 ## Install
 
 0. have python 3 rdy
