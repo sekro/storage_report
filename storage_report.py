@@ -59,11 +59,14 @@ def make_table_list(item_list, path=None, size_list=None):
             fp = os.path.join(path, file)
             if not os.path.isfile(fp):
                 size_str = "file_not_found"
+                mod_time = "file_not_found"
             elif not os.path.islink(fp):
                 size_str = human_readable_size_as_string(os.path.getsize(fp))
+                mod_time = time.ctime(os.path.getmtime(fp))]
             else:
                 size_str = "symlink"
-            table.extend([file, size_str, time.ctime(os.path.getmtime(fp))])
+                mod_time = "symlink"
+            table.extend([file, size_str, mod_time])
     return table
 
 
