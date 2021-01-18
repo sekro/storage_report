@@ -57,7 +57,13 @@ def make_table_list(item_list, path=None, size_list=None):
         table = ["Name", "Size", "Last modified"]
         for file in item_list:
             fp = os.path.join(path, file)
-            table.extend([file, human_readable_size_as_string(os.path.getsize(fp)), time.ctime(os.path.getmtime(fp))])
+            if not os.path.isfile(fp):
+                size_str = "file_not_found"
+            elif not os.path.islink(fp):
+                size_str = human_readable_size_as_string(os.path.getsize(fp))
+            else:
+                size_str = "symlink"
+            table.extend([file, size_str, time.ctime(os.path.getmtime(fp))])
     return table
 
 
