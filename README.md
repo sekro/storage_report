@@ -11,4 +11,4 @@ Walks through given folder and generates a report (markdown) in output_folder gi
 
 ## Usage
 
-``data_report.py [-h] [--json] folder output_folder``
+``data_report.py [-h] [--json] [--max_lvl_md] folder output_folder``
