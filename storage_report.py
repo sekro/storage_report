@@ -116,17 +116,20 @@ def gen_markdown_folder_section(md_report_file, use_dict, path):
         use_dict["Number of files"], use_dict["Number of sub-folders"]))
     md_report_file.new_line("Total size in bytes: {}".format(use_dict["Size"]))
     md_report_file.new_line("Total size: {}".format(human_readable_size_as_string(use_dict["Size"])))
+    md_report_file.new_line()
     if use_dict["Number of files"] > 0:
         md_report_file.new_header(level=2, title="Files")
         md_report_file.new_table(columns=3, rows=1 + use_dict["Number of files"],
                                  text=make_table_list(item_list=use_dict["Files in folder"],
                                                       size_list=use_dict["file_sizes"],
                                                       mod_time_list=use_dict["file_mod_times"]))
+        md_report_file.new_line()
     if use_dict["Number of sub-folders"] > 0:
         md_report_file.new_header(level=2, title="Folders")
         md_report_file.new_table(columns=2, rows=1 + use_dict["Number of sub-folders"],
                                  text=make_table_list(item_list=use_dict["Sub-folders"],
                                                       size_list=use_dict["sub-folder_sizes"]))
+        md_report_file.new_line()
 
 
 def make_markdown_report(in_data_dict, out_folder, base_folder, level_cap=None):
@@ -146,7 +149,7 @@ def make_markdown_report(in_data_dict, out_folder, base_folder, level_cap=None):
             else:
                 md_report_file.new_header(level=1, title='Content of Sub-Folder level {}: {} '.format(i, key))
             gen_markdown_folder_section(md_report_file, item, key)
-    md_report_file.new_table_of_contents(table_title='Contents', depth=2)
+    md_report_file.new_table_of_contents(table_title='Contents', depth=1)
     md_report_file.create_md_file()
 
 
