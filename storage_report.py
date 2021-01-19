@@ -135,7 +135,7 @@ def make_markdown_report(in_data_dict, out_folder, base_folder, level_cap=None):
     md_report_file.new_paragraph("This is an auto-generated storage report giving detailed info on files and folders "
                                  "inside base the folder.")
     md_report_file.new_line("Report generated {}".format(datetime.now().strftime("%d.%m.%Y %H:%M:%S")))
-    if level_cap is None:
+    if level_cap is None or level_cap > in_data_dict["max_depth"]:
         level_cap = in_data_dict["max_depth"]
     else:
         md_report_file.new_line("Report generation was limited to folder level {}".format(level_cap))
@@ -177,8 +177,13 @@ def scan_folder(folder):
             if item["Number of files"] > 0:
                 item["file_sizes"] = get_size_list_files(item["Files in folder"], key)
                 item["file_mod_times"] = get_mod_time_list_files(item["Files in folder"], key)
-            if item["Number of sub-folders"] > 0:
+            else:
+                item["file_sizes"] = None
+                item["file_mod_times"] = None
+            if item["Number of sub-folders"] > 0 and i+1 in data_report_dict:
                 item["sub-folder_sizes"] = get_size_list_folders(item["Sub-folders"], key, data_report_dict[i+1])
+            else:
+                item["sub-folder_sizes"] = None
     return data_report_dict
 
 
